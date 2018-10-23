@@ -9,6 +9,6 @@ license = "Apache-2.0"
 repository = "https://github.com/fschutt/material-icons"
 readme = "README.md"
 # Un-comment this to re-generate the lib.rs file
-# build = "./build.rs"
+# build = "./generate.rs"
 
 [dependencies]
