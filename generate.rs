@@ -21,12 +21,13 @@ const RUST_CODE_END_2: &str = "    }\n}\n";
 const RUST_CODE_3: &str = include_str!("./extra.rs");
 const RUST_CODE_START_4 : &str = "
 /// Get icon HTML name
-pub fn icon_to_html_name(icon: &Icon) -> String {
+pub fn icon_to_html_name(icon: &Icon) -> &'static str {
     use self::Icon::*;
     match *icon {
 ";
-const RUST_CODE_END_4: &str = r#"    }.to_string()
-}"#;
+const RUST_CODE_END_4: &str = r#"    }
+}
+"#;
 
 
 fn main() {

@@ -1927,7 +1927,7 @@ impl fmt::Display for Icon {
 }
 
 /// Get icon HTML name
-pub fn icon_to_html_name(icon: &Icon) -> String {
+pub fn icon_to_html_name(icon: &Icon) -> &'static str {
     use self::Icon::*;
     match *icon {
         Rotation3d => "3d_rotation",
@@ -2862,5 +2862,5 @@ pub fn icon_to_html_name(icon: &Icon) -> String {
         ZoomIn => "zoom_in",
         ZoomOut => "zoom_out",
         ZoomOutMap => "zoom_out_map",
-    }.to_string()
+    }
 }
