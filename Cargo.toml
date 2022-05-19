@@ -12,3 +12,5 @@ readme = "README.md"
 # build = "./generate.rs"
 
 [dependencies]
+enum-iterator = "0.8.1"
+

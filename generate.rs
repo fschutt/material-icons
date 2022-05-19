@@ -5,9 +5,12 @@ use std::char::from_u32;
 
 const RUST_CODE_PREAMBLE: &str = include_str!("preamble.rs");
 const RUST_CODE_START_1: &str = "
+#[macro_use]
+extern crate enum_iterator;
+
 /// Icon containing all possible icon names as enum discriminants
 #[repr(C)]
-#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Debug, Copy, Clone, IntoEnumIterator, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum Icon {\n";
 const RUST_CODE_END_1: &str = "}\n\n";
 const RUST_CODE_START_2: &str = "
