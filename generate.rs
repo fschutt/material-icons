@@ -19,6 +19,15 @@ pub fn icon_to_char(icon: Icon) -> char {
 ";
 const RUST_CODE_END_2: &str = "    }\n}\n";
 const RUST_CODE_3: &str = include_str!("./extra.rs");
+const RUST_CODE_START_4 : &str = "
+/// Get icon HTML name
+pub fn icon_to_html_name(icon: &Icon) -> String {
+    use self::Icon::*;
+    match *icon {
+";
+const RUST_CODE_END_4: &str = r#"    }.to_string()
+}"#;
+
 
 fn main() {
     const CODEPOINTS: &str = include_str!("./assets/codepoints.txt");
@@ -48,8 +57,8 @@ fn main() {
         let icon_usize = u32::from_str_radix(icon_codepoint, 16).unwrap();
         let icon_char = from_u32(icon_usize).unwrap();
 
-        (new_name, icon_char)
-    }).collect::<Vec<(String, char)>>();
+        (new_name, icon_char, icon_name)
+    }).collect::<Vec<(String, char, &str)>>();
 
     let mut file = File::create("./src/lib.rs").unwrap();
 
@@ -57,7 +66,7 @@ fn main() {
 
     // -- part 1: create the enum
     file.write(RUST_CODE_START_1.as_bytes()).unwrap();
-    for (icon_name, _) in &codepoints {
+    for (icon_name, _, _) in &codepoints {
         let enum_str = format!("    {},\n", icon_name);
         file.write(enum_str.as_bytes()).unwrap();
     }
@@ -65,7 +74,7 @@ fn main() {
 
     // -- part 2: match on the enum
     file.write(RUST_CODE_START_2.as_bytes()).unwrap();
-    for (icon_name, icon_char) in &codepoints {
+    for (icon_name, icon_char, _) in &codepoints {
         let enum_str = format!("        {} => {:?},\n", icon_name, icon_char);
         file.write(enum_str.as_bytes()).unwrap();
     }
@@ -73,4 +82,16 @@ fn main() {
 
     // -- part 3: convenience code
     file.write(RUST_CODE_3.as_bytes()).unwrap();
+
+    // -- part 4: match on the enum
+    file.write(RUST_CODE_START_4.as_bytes()).unwrap();
+    for (icon_name, _, mut name) in &codepoints {
+        if icon_name == "Rotation3d" {
+            name = "3d_rotation";
+        }
+        let enum_str = format!("        {} => {:?},\n", icon_name, name);
+        file.write(enum_str.as_bytes()).unwrap();
+    }
+    file.write(RUST_CODE_END_4.as_bytes()).unwrap();
+
 }
