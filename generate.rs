@@ -32,20 +32,76 @@ const RUST_CODE_END_4: &str = r#"    }
 }
 "#;
 
+fn fix_icon_name(name: &str) -> &str {
+    // Rust icons can't start with number
+    match name {
+        "10k" => "ten_k",
+        "10mp" => "ten_mp",
+        "11mp" => "eleven_mp",
+        "123" => "one_two_three",
+        "12mp" => "twelve_mp",
+        "13mp" => "thirteen_mp",
+        "14mp" => "fourteen_mp",
+        "15mp" => "fifteen_mp",
+        "16mp" => "sixteen_mp",
+        "17mp" => "seventeen_mp",
+        "18_up_rating" => "eighteen_up_rating",
+        "18mp" => "eighteen_mp",
+        "19mp" => "nineteen_mp",
+        "1k" => "one_k",
+        "1k_plus" => "one_k_plus",
+        "1x_mobiledata" => "one_x_mobiledata",
+        "20mp" => "twenty_mp",
+        "21mp" => "twenty_one_mp",
+        "22mp" => "twenty_two_mp",
+        "23mp" => "twenty_three_mp",
+        "24mp" => "twenty_four_mp",
+        "2k" => "two_k",
+        "2k_plus" => "two_k_plus",
+        "2mp" => "two_mp",
+        "30fps" => "thirty_fps",
+        "30fps_select" => "thirty_fps_select",
+        "360" => "three_sixty",
+        "3d_rotation" => "rotation_3d",
+        "3g_mobiledata" => "mobiledata_3g",
+        "3k" => "three_k",
+        "3k_plus" => "three_k_plus",
+        "3mp" => "three_mp",
+        "3p" => "three_p",
+        "4g_mobiledata" => "mobiledata_4g",
+        "4g_plus_mobiledata" => "mobiledata_4g_plus",
+        "4k" => "four_k",
+        "4k_plus" => "four_k_plus",
+        "4mp" => "four_mp",
+        "5g" => "five_g",
+        "5k" => "five_k",
+        "5k_plus" => "five_k_plus",
+        "5mp" => "five_mp",
+        "60fps" => "sixty_fps",
+        "60fps_select" => "sixty_fps_select",
+        "6_ft_apart" => "six_ft_apart",
+        "6k" => "six_k",
+        "6k_plus" => "six_k_plus",
+        "6mp" => "six_mp",
+        "7k" => "seven_k",
+        "7k_plus" => "seven_k_plus",
+        "7mp" => "seven_mp",
+        "8k" => "eight_k",
+        "8k_plus" => "eight_k_plus",
+        "8mp" => "eight_mp",
+        "9k" => "nine_k",
+        "9k_plus" => "nine_k_plus",
+        "9mp" => "nine_mp",
+        name => name,
+    }
+}
 
 fn main() {
     const CODEPOINTS: &str = include_str!("./assets/codepoints.txt");
 
     let codepoints = CODEPOINTS.lines().map(|line| {
         let mut whitespace_iterator = line.split_whitespace();
-        let mut icon_name = whitespace_iterator.next().unwrap(); // 3d_rotation
-
-        // Rust icons can't start with number
-        if icon_name == "3d_rotation" {
-            icon_name = "rotation_3d";
-        }
-
-
+        let icon_name = fix_icon_name(whitespace_iterator.next().unwrap());
 
         // Adjust icon name to be PascalCase instead of snake_case
         let mut new_name = String::new();
@@ -90,9 +146,8 @@ fn main() {
     // -- part 4: match on the enum
     file.write(RUST_CODE_START_4.as_bytes()).unwrap();
     for (icon_name, _, mut name) in &codepoints {
-        if icon_name == "Rotation3d" {
-            name = "3d_rotation";
-        }
+        name = fix_icon_name(name);
+
         let enum_str = format!("        {} => {:?},\n", icon_name, name);
         file.write(enum_str.as_bytes()).unwrap();
     }
